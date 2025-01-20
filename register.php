@@ -1,46 +1,39 @@
 <?php
-// Configuration de la base de données
-$host = 'localhost';
-$dbname = 'user_database';
-$username = 'root';
-$password = '';
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erreur de connexion : " . $e->getMessage());
-}
-
-// Traitement des données du formulaire
+// Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Récupération des données du formulaire
-    $user = htmlspecialchars($_POST['username']);
-    $email = htmlspecialchars($_POST['email']);
-    $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    // Collect and sanitize user input
+    $username = htmlspecialchars(trim($_POST['username']));
+    $email = htmlspecialchars(trim($_POST['email']));
+    $password = htmlspecialchars(trim($_POST['password']));
+    $address = htmlspecialchars(trim($_POST['address']));
 
-    // Validation côté serveur
-    if (strlen($user) < 3) {
-        die("Le nom d'utilisateur doit contenir au moins 3 caractères.");
+    // Simple validation
+    $errors = [];
+
+    if (strlen($username) < 3) {
+        $errors[] = "Le nom d'utilisateur doit contenir au moins 3 caractères.";
     }
+
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        die("Adresse email invalide.");
-    }
-    if (strlen($_POST['password']) < 6) {
-        die("Le mot de passe doit contenir au moins 6 caractères.");
+        $errors[] = "L'adresse email n'est pas valide.";
     }
 
-    // Insertion dans la base de données
-    try {
-        $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
-        $stmt->bindParam(':username', $user);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':password', $pass);
-        $stmt->execute();
-        echo "Inscription réussie !";
-    } catch (PDOException $e) {
-        die("Erreur lors de l'inscription : " . $e->getMessage());
+    if (strlen($password) < 6) {
+        $errors[] = "Le mot de passe doit contenir au moins 6 caractères.";
+    }
+
+    if (empty($address)) {
+        $errors[] = "L'adresse ne peut pas être vide.";
+    }
+
+    // Display errors or proceed
+    if (!empty($errors)) {
+        foreach ($errors as $error) {
+            echo "<p style='color:red;'>$error</p>";
+        }
+    } else {
+        // Here, you could save data to the database
+        echo "<p style='color:green;'>Inscription réussie !</p>";
     }
 }
 ?>
-
