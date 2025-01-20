@@ -12,7 +12,7 @@ try {
     die("Erreur de connexion : " . $e->getMessage());
 }
 
-<?php
+
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Collect and sanitize user input
@@ -33,8 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "L'adresse email n'est pas valide.";
     }
 
-    if (strlen($password) < 6) {
-        $errors[] = "Le mot de passe doit contenir au moins 6 caractères.";
+    // Password validation: at least one uppercase, one lowercase, one digit, and 6 characters
+    if (!preg_match('/(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}/', $password)) {
+        $errors[] = "Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre, et être long de 6 caractères ou plus.";
     }
 
     if (empty($address)) {

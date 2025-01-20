@@ -23,8 +23,9 @@
         <span class="error" id="emailError"></span>
 
         <label for="password">Mot de passe :</label>
-        <input type="password" id="password" name="password" required minlength="6">
-        <span class="error" id="passwordError"></span>
+        <input type="password" id="password" name="password" required minlength="6" 
+               pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}">
+        <span class="error" id="passwordError">Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule, et un chiffre.</span>
 
         <label for="address">Adresse :</label>
         <input type="text" id="address" name="address" required>
@@ -32,9 +33,4 @@
 
         <label for="phone">Numéro de téléphone :</label>
         <input type="text" id="phone" name="phone" required pattern="\+?[0-9]{10,15}">
-        <span class="error" id="phoneError"></span>
-
-        <button type="submit">S'inscrire</button>
-    </form>
-</body>
-</html>
+        <span
