@@ -1,4 +1,18 @@
 <?php
+// Configuration de la base de données
+$host = 'localhost';
+$dbname = 'user_database';
+$username = 'root';
+$password = '';
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Erreur de connexion : " . $e->getMessage());
+}
+
+<?php
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Collect and sanitize user input
@@ -6,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = htmlspecialchars(trim($_POST['email']));
     $password = htmlspecialchars(trim($_POST['password']));
     $address = htmlspecialchars(trim($_POST['address']));
+    $phone = htmlspecialchars(trim($_POST['phone']));
 
     // Simple validation
     $errors = [];
@@ -24,6 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($address)) {
         $errors[] = "L'adresse ne peut pas être vide.";
+    }
+
+    if (!preg_match('/^\+?[0-9]{10,15}$/', $phone)) {
+        $errors[] = "Le numéro de téléphone doit être valide (10 à 15 chiffres).";
     }
 
     // Display errors or proceed
