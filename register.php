@@ -12,6 +12,10 @@ try {
     die("Erreur de connexion : " . $e->getMessage());
 }
 
+//je rajoute des choses pour le commit 
+//je rajoute un deuxieme comment pour le commit
+
+
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
