@@ -1,4 +1,4 @@
-<?php
+ezaeazeazeazeazeazeazeazeazeaezazeaeza<?php
 // Configuration de la base de données
 $host = 'localhost';
 $dbname = 'user_database';
